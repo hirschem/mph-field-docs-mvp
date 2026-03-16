@@ -39,3 +39,33 @@ export function saveDocument(
     );
   });
 }
+
+export function getDocuments(type: "invoice" | "book"): Promise<
+  {
+    id: number;
+    type: string;
+    title: string;
+    content_html: string;
+    created_at: string;
+  }[]
+> {
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT id, type, title, content_html, created_at
+       FROM documents
+       WHERE type = ?
+       ORDER BY created_at DESC`,
+      [type],
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows as {
+          id: number;
+          type: string;
+          title: string;
+          content_html: string;
+          created_at: string;
+        }[]);
+      }
+    );
+  });
+}
