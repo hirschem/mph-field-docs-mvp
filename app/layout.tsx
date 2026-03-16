@@ -27,6 +27,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <nav style={{
+          width: '100%',
+          padding: '16px 0',
+          borderBottom: '1px solid #ddd',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '32px',
+          background: '#fafafa',
+          fontSize: '18px',
+        }}>
+          <a href="/" style={{ textDecoration: 'none', color: '#222' }}>Home</a>
+          <a href="/invoices" style={{ textDecoration: 'none', color: '#222' }}>Invoices</a>
+          <a href="/book-pages" style={{ textDecoration: 'none', color: '#222' }}>Book Pages</a>
+        </nav>
         {children}
       </body>
     </html>
