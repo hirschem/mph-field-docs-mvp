@@ -1,13 +1,16 @@
 import { getDocumentById, initDb } from '../../../lib/db';
 
-export default async function InvoiceDetail({ params }: { params: { id: string } }) {
+export default async function InvoiceDetail({ params }: { params: Promise<{ id: string }> }) {
   await initDb();
-  const id = Number(params.id);
-  if (!id || isNaN(id)) {
+  const { id: idParam } = await params;
+  const id = Number(idParam);
+
+  if (!idParam || !id || isNaN(id)) {
     return (
       <div style={{ marginTop: '48px', textAlign: 'center', fontSize: '1.2rem' }}>Invalid invoice id.</div>
     );
   }
+
   const doc = await getDocumentById(id);
   if (!doc || doc.type !== 'invoice') {
     return (

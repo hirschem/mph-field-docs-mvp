@@ -1,6 +1,18 @@
 "use client";
 import { useState } from "react";
 
+// Fixed company info block for invoices
+const COMPANY_INFO_HTML = `
+  <div style="margin-bottom: 16px;">
+    MPH Construction and Painting<br>
+    720-883-5097<br>
+    303-249-4563<br>
+    mhirsch60@hotmail.com<br>
+    9426 Troon Village Way<br>
+    Lone Tree, CO 80124
+  </div>
+`;
+
 export default function NewInvoice() {
   const [generated, setGenerated] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -9,7 +21,10 @@ export default function NewInvoice() {
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = () => {
-    setGenerated("<b>Sample Invoice Content</b><br>This is a generated invoice.");
+    setGenerated(
+      COMPANY_INFO_HTML +
+        "<b>Sample Invoice Content</b><br>This is a generated invoice."
+    );
     setSaved(false);
     setEmailSent(false);
     setError(null);
