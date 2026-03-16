@@ -73,13 +73,7 @@ export default function NewInvoice() {
       >
         Save
       </button>
-      <button
-        style={{ padding: '12px 24px', fontSize: '1rem', marginBottom: '16px' }}
-        onClick={() => window.print()}
-        disabled={!generated}
-      >
-        Print
-      </button>
+      {/* Print button removed */}
       <button
         style={{ padding: '12px 24px', fontSize: '1rem', marginBottom: '16px' }}
         onClick={handleEmail}
@@ -90,7 +84,7 @@ export default function NewInvoice() {
       <div style={{ marginTop: '16px', fontSize: '1rem', color: '#555', border: '1px solid #ddd', padding: '24px', width: '100%', maxWidth: '400px', textAlign: 'center', minHeight: '48px' }}>
         {generated ? <span dangerouslySetInnerHTML={{ __html: generated }} /> : "Generated invoice will appear here."}
       </div>
-      {saved && <div style={{ color: 'green', marginTop: '8px' }}>Invoice saved.</div>}
+      {saved && <div style={{ color: 'green', marginTop: '8px' }}>Invoice saved. You can open saved invoices from the library for viewing later.</div>}
       {error && <div style={{ color: 'red', marginTop: '8px' }}>{error}</div>}
       {emailSent && <div style={{ color: 'blue', marginTop: '8px' }}>Invoice emailed.</div>}
     </div>
