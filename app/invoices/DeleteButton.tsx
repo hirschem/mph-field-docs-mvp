@@ -1,16 +1,21 @@
 "use client";
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DeleteButton({ id }: { id: number }) {
   const [pending, startTransition] = useTransition();
-  const handleDelete = async () => {
+  const router = useRouter();
+  const handleDelete = () => {
+    if (!confirm("Delete this document?")) return;
     startTransition(async () => {
-      await fetch("/api/delete-document", {
+      const res = await fetch("/api/delete-document", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-      window.location.reload();
+      if (res.ok) {
+        router.refresh();
+      }
     });
   };
   return (
