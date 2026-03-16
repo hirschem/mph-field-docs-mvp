@@ -1,4 +1,6 @@
+
 import { initDb, getDocuments } from '../../lib/db';
+import DeleteButton from './DeleteButton';
 
 export default async function Invoices() {
   await initDb();
@@ -16,10 +18,11 @@ export default async function Invoices() {
       ) : (
         <div style={{ marginTop: '24px', width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {invoices.map((doc) => (
-            <div key={doc.id} style={{ border: '1px solid #ddd', padding: '16px', borderRadius: '8px' }}>
+            <div key={doc.id} style={{ border: '1px solid #ddd', padding: '16px', borderRadius: '8px', position: 'relative' }}>
               <div style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px' }}>{doc.title}</div>
               <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '8px' }}>{doc.created_at}</div>
               <div dangerouslySetInnerHTML={{ __html: doc.content_html }} />
+              <DeleteButton id={doc.id} />
             </div>
           ))}
         </div>
