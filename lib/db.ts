@@ -1,3 +1,29 @@
+export function getDocumentById(id: number): Promise<{
+  id: number;
+  type: string;
+  title: string;
+  content_html: string;
+  created_at: string;
+} | undefined> {
+  return new Promise((resolve, reject) => {
+    db.get(
+      `SELECT id, type, title, content_html, created_at FROM documents WHERE id = ?`,
+      [id],
+      (err, row) => {
+        if (err) reject(err);
+        else resolve(row as
+          | {
+              id: number;
+              type: string;
+              title: string;
+              content_html: string;
+              created_at: string;
+            }
+          | undefined);
+      }
+    );
+  });
+}
 import sqlite3 from "sqlite3";
 import path from "path";
 
