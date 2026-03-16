@@ -5,18 +5,21 @@ export default function NewInvoice() {
   const [generated, setGenerated] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = () => {
     setGenerated("<b>Sample Invoice Content</b><br>This is a generated invoice.");
     setSaved(false);
     setEmailSent(false);
+    setError(null);
   };
 
   const handleSave = async () => {
     if (!generated) return;
     setLoading(true);
     setSaved(false);
+    setError(null);
     try {
       const res = await fetch('/api/save-document', {
         method: 'POST',
@@ -29,8 +32,12 @@ export default function NewInvoice() {
       });
       if (res.ok) {
         setSaved(true);
+      } else {
+        setError("Failed to save invoice.");
       }
-    } catch {}
+    } catch {
+      setError("Failed to save invoice.");
+    }
     setLoading(false);
   };
 
@@ -76,6 +83,7 @@ export default function NewInvoice() {
         {generated ? <span dangerouslySetInnerHTML={{ __html: generated }} /> : "Generated invoice will appear here."}
       </div>
       {saved && <div style={{ color: 'green', marginTop: '8px' }}>Invoice saved.</div>}
+      {error && <div style={{ color: 'red', marginTop: '8px' }}>{error}</div>}
       {emailSent && <div style={{ color: 'blue', marginTop: '8px' }}>Invoice emailed.</div>}
     </div>
   );
