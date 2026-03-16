@@ -70,6 +70,13 @@ export default function TranscribeBookPage() {
       >
         Save
       </button>
+      <button
+        style={{ padding: '12px 24px', fontSize: '1rem', marginBottom: '16px' }}
+        onClick={() => window.print()}
+        disabled={!generated}
+      >
+        Print
+      </button>
       <div style={{ marginTop: '16px', fontSize: '1rem', color: '#555', border: '1px solid #ddd', padding: '24px', width: '100%', maxWidth: '400px', textAlign: 'center', minHeight: '48px' }}>
         {generated ? <span dangerouslySetInnerHTML={{ __html: generated }} /> : "Transcribed text will appear here."}
       </div>

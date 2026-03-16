@@ -75,6 +75,13 @@ export default function NewInvoice() {
       </button>
       <button
         style={{ padding: '12px 24px', fontSize: '1rem', marginBottom: '16px' }}
+        onClick={() => window.print()}
+        disabled={!generated}
+      >
+        Print
+      </button>
+      <button
+        style={{ padding: '12px 24px', fontSize: '1rem', marginBottom: '16px' }}
         onClick={handleEmail}
         disabled={!saved || emailSent || loading}
       >
