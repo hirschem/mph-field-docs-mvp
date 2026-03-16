@@ -51,6 +51,7 @@ export default function NewInvoice() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '48px' }}>
+      <a href="/invoices" style={{ alignSelf: 'flex-start', marginBottom: '16px', fontSize: '1rem', color: '#0070f3', textDecoration: 'underline' }}>Back to Invoices</a>
       <h1 style={{ fontSize: '2rem', marginBottom: '32px' }}>Create Invoice</h1>
       <input
         type="file"

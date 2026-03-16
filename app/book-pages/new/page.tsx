@@ -47,6 +47,7 @@ export default function TranscribeBookPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '48px' }}>
+      <a href="/book-pages" style={{ alignSelf: 'flex-start', marginBottom: '16px', fontSize: '1rem', color: '#0070f3', textDecoration: 'underline' }}>Back to Book Pages</a>
       <h1 style={{ fontSize: '2rem', marginBottom: '32px' }}>Transcribe Book Page</h1>
       <input
         type="file"
