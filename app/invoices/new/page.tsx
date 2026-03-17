@@ -209,8 +209,8 @@ export default function NewInvoice() {
         </label>
         {files.length > 0 && (
           <div style={{ marginTop: "8px", fontSize: "0.95rem", color: "#555" }}>
-            {files.map((file) => (
-              <div key={file.name}>{file.name}</div>
+            {files.map((file, index) => (
+              <div key={file.name}>Image {index + 1} uploaded</div>
             ))}
           </div>
         )}
