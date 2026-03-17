@@ -211,7 +211,18 @@ export default function NewInvoice() {
         {files.length > 0 && (
           <div style={{ marginTop: "8px", fontSize: "0.95rem", color: "#555" }}>
             {files.map((file, index) => (
-              <div key={file.name}>Image {index + 1} uploaded</div>
+              <div key={file.name}>
+                Image {index + 1} uploaded
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFiles((prev) => prev.filter((_, i) => i !== index))
+                  }
+                  style={{ marginLeft: "10px", fontSize: "0.9em", padding: "2px 8px", color: "red" }}
+                >
+                  Remove
+                </button>
+              </div>
             ))}
           </div>
         )}
