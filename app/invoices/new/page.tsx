@@ -33,6 +33,8 @@ export default function NewInvoice() {
     // Section flags
     const hasMaterials = false;
     const materialsNotIncluded = false;
+    const hasPricing = false;
+    const pricingLabel = 'Total';
 
     let html = COMPANY_INFO_HTML;
     html += BILL_TO_HTML;
@@ -43,7 +45,10 @@ export default function NewInvoice() {
     if (materialsNotIncluded) {
       html += '<div style="margin-bottom: 16px; color: #a00;"><b>Materials Not Included</b><br>Client is responsible for providing materials.</div>';
     }
-    html += '<div style="margin-bottom: 16px;"><b>Total</b><br>$2,500</div>';
+    // Pricing section only renders here if hasPricing is true
+    if (hasPricing) {
+      html += `<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">${pricingLabel}</strong><br/>$2,500</div>`;
+    }
     setGenerated(html);
     setSaved(false);
     setEmailSent(false);
