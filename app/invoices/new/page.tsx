@@ -23,12 +23,13 @@ const BILL_TO_HTML = `
 `;
 
 export default function NewInvoice() {
-    const documentConfig = {
-      invoice: { hasPricing: true, pricingLabel: "Total Due" },
-      proposal: { hasPricing: true, pricingLabel: "Estimated Total" },
-      inspection: { hasPricing: false, pricingLabel: "" },
-    };
-  const documentType: "invoice" | "proposal" | "inspection" = "inspection";
+  const documentConfig = {
+    invoice: { hasPricing: true, pricingLabel: "Total Due" },
+    proposal: { hasPricing: true, pricingLabel: "Estimated Total" },
+    inspection: { hasPricing: false, pricingLabel: "" },
+  };
+
+  const documentType: "invoice" | "proposal" | "inspection" = "invoice";
   const backHref = "/invoices";
   const backText = "Back to Field Documents";
 
@@ -37,7 +38,8 @@ export default function NewInvoice() {
     proposal: "Proposal",
     inspection: "Inspection",
   };
-  let displayTitle = titleMap[documentType];
+
+  const displayTitle = titleMap[documentType];
 
   const [generated, setGenerated] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -54,14 +56,17 @@ export default function NewInvoice() {
 
     let html = COMPANY_INFO_HTML;
     html += BILL_TO_HTML;
-    html += '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Scope of Work</strong><br>Paint interior walls and ceilings.</div>';
+    html +=
+      '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Scope of Work</strong><br>Paint interior walls and ceilings.</div>';
 
     if (hasMaterials) {
-      html += '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Materials</strong><br>List of materials goes here.</div>';
+      html +=
+        '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Materials</strong><br>List of materials goes here.</div>';
     }
 
     if (materialsNotIncluded) {
-      html += '<div style="margin-bottom: 16px; color: #a00;"><strong style="font-size: 16px;">Materials Not Included</strong><br>Client is responsible for providing materials.</div>';
+      html +=
+        '<div style="margin-bottom: 16px; color: #a00;"><strong style="font-size: 16px;">Materials Not Included</strong><br>Client is responsible for providing materials.</div>';
     }
 
     if (hasPricing) {
@@ -86,8 +91,8 @@ export default function NewInvoice() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "invoice",
-          title: displayTitle,
+          type: documentType,
+          title: documentType,
           content_html: generated,
         }),
       });
@@ -113,15 +118,30 @@ export default function NewInvoice() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "48px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: "48px",
+      }}
+    >
       <a
         href={backHref}
-        style={{ alignSelf: "flex-start", marginBottom: "16px", fontSize: "1rem", color: "#0070f3", textDecoration: "underline" }}
+        style={{
+          alignSelf: "flex-start",
+          marginBottom: "16px",
+          fontSize: "1rem",
+          color: "#0070f3",
+          textDecoration: "underline",
+        }}
       >
         {backText}
       </a>
 
-      <h1 style={{ fontSize: "2rem", marginBottom: "32px" }}>{`Create ${displayTitle}`}</h1>
+      <h1 style={{ fontSize: "2rem", marginBottom: "32px" }}>
+        {`Create ${displayTitle}`}
+      </h1>
 
       <input
         type="file"
@@ -171,7 +191,11 @@ export default function NewInvoice() {
           lineHeight: 1.7,
         }}
       >
-        {generated ? <span dangerouslySetInnerHTML={{ __html: generated }} /> : `Generated ${displayTitle.toLowerCase()} will appear here.`}
+        {generated ? (
+          <span dangerouslySetInnerHTML={{ __html: generated }} />
+        ) : (
+          `Generated ${displayTitle.toLowerCase()} will appear here.`
+        )}
       </div>
 
       {saved && (
@@ -182,7 +206,11 @@ export default function NewInvoice() {
 
       {error && <div style={{ color: "red", marginTop: "8px" }}>{error}</div>}
 
-      {emailSent && <div style={{ color: "blue", marginTop: "8px" }}>{displayTitle} emailed.</div>}
+      {emailSent && (
+        <div style={{ color: "blue", marginTop: "8px" }}>
+          {displayTitle} emailed.
+        </div>
+      )}
     </div>
   );
 }

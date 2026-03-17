@@ -21,26 +21,27 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
     <div className="invoice-detail-root" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '48px' }}>
       <style>{`
         @media print {
+          @page {
+            margin: 0.75in;
+          }
           .invoice-detail-controls,
           .invoice-detail-back {
             display: none !important;
           }
+          .invoice-detail-title,
+          .invoice-detail-meta {
+            display: none !important;
+          }
           .invoice-detail-root {
             align-items: stretch !important;
-            margin-top: 0 !important;
+            margin: 0 !important;
           }
           .invoice-detail-content {
             border: none !important;
-            padding: 0 !important;
+            box-shadow: none !important;
             max-width: none !important;
             width: 100% !important;
-            box-shadow: none !important;
-          }
-          .invoice-detail-title,
-          .invoice-detail-meta {
-            text-align: left !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
+            padding: 0 !important;
           }
         }
       `}</style>
