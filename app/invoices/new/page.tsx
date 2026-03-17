@@ -43,7 +43,6 @@ export default function NewInvoice() {
 
   const [generated, setGenerated] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -109,13 +108,6 @@ export default function NewInvoice() {
     setLoading(false);
   };
 
-  const handleEmail = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setEmailSent(true);
-      setLoading(false);
-    }, 500);
-  };
 
   return (
     <div
@@ -166,13 +158,6 @@ export default function NewInvoice() {
         Save
       </button>
 
-      <button
-        style={{ padding: "12px 24px", fontSize: "1rem", marginBottom: "16px" }}
-        onClick={handleEmail}
-        disabled={!saved || emailSent || loading}
-      >
-        Email
-      </button>
 
       <div
         style={{
@@ -206,11 +191,6 @@ export default function NewInvoice() {
 
       {error && <div style={{ color: "red", marginTop: "8px" }}>{error}</div>}
 
-      {emailSent && (
-        <div style={{ color: "blue", marginTop: "8px" }}>
-          {displayTitle} emailed.
-        </div>
-      )}
     </div>
   );
 }
