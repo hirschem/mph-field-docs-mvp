@@ -159,18 +159,18 @@ export default function NewInvoice() {
         }
       `}</style>
 
-      <a
-        href={backHref}
-        style={{
-          alignSelf: "flex-start",
-          marginBottom: "16px",
-          fontSize: "1rem",
-          color: "#0070f3",
-          textDecoration: "underline",
-        }}
-      >
-        {backText}
-      </a>
+          <div style={{ width: '100%', maxWidth: '400px', marginBottom: '16px' }}>
+            <a
+              href={backHref}
+              style={{
+                fontSize: "1rem",
+                color: "#0070f3",
+                textDecoration: "underline",
+              }}
+            >
+              {backText}
+            </a>
+          </div>
 
       <h1 style={{ fontSize: "2rem", marginBottom: "32px" }}>
         {`Create ${displayTitle}`}
