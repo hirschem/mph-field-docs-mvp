@@ -31,10 +31,21 @@ export default function NewInvoice() {
 
   const handleGenerate = () => {
     // Section flags
+    const documentType = 'inspection';
     const hasMaterials = false;
     const materialsNotIncluded = false;
-    const hasPricing = false;
-    const pricingLabel = 'Total';
+    let hasPricing = false;
+    let pricingLabel = '';
+    if (documentType === 'invoice') {
+      hasPricing = true;
+      pricingLabel = 'Total Due';
+    } else if (documentType === 'proposal') {
+      hasPricing = true;
+      pricingLabel = 'Estimated Total';
+    } else if (documentType === 'inspection') {
+      hasPricing = false;
+      pricingLabel = '';
+    }
 
     let html = COMPANY_INFO_HTML;
     html += BILL_TO_HTML;
