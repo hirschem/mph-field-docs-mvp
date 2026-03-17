@@ -65,7 +65,24 @@ const BILL_TO_HTML = `
 `;
 
 export default function NewInvoice() {
-  let documentType: "invoice" | "proposal" | "inspection" = "inspection";
+    const documentConfig = {
+      invoice: { hasPricing: true, pricingLabel: "Total Due" },
+      proposal: { hasPricing: true, pricingLabel: "Estimated Total" },
+      inspection: { hasPricing: false, pricingLabel: "" },
+    };
+  const documentType: "invoice" | "proposal" | "inspection" = "inspection";
+  const backHrefMap = {
+    invoice: "/invoices",
+    proposal: "/book-pages",
+    inspection: "/book-pages",
+  };
+  const backTextMap = {
+    invoice: "Back to Invoices",
+    proposal: "Back to Book Pages",
+    inspection: "Back to Book Pages",
+  };
+  const backHref = backHrefMap[documentType];
+  const backText = backTextMap[documentType];
 
   const titleMap = {
     invoice: "Invoice",
@@ -83,20 +100,9 @@ export default function NewInvoice() {
   const handleGenerate = () => {
     const hasMaterials = false;
     const materialsNotIncluded = false;
-
-    let hasPricing = false;
-    let pricingLabel = "";
-
-    if (documentType === "invoice") {
-      hasPricing = true;
-      pricingLabel = "Total Due";
-    } else if (documentType === "proposal") {
-      hasPricing = true;
-      pricingLabel = "Estimated Total";
-    } else if (documentType === "inspection") {
-      hasPricing = false;
-      pricingLabel = "";
-    }
+    const config = documentConfig[documentType];
+    const hasPricing = config.hasPricing;
+    const pricingLabel = config.pricingLabel;
 
     let html = COMPANY_INFO_HTML;
     html += BILL_TO_HTML;
@@ -161,10 +167,10 @@ export default function NewInvoice() {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "48px" }}>
       <a
-        href="/invoices"
+        href={backHref}
         style={{ alignSelf: "flex-start", marginBottom: "16px", fontSize: "1rem", color: "#0070f3", textDecoration: "underline" }}
       >
-        Back to Invoices
+        {backText}
       </a>
 
       <h1 style={{ fontSize: "2rem", marginBottom: "32px" }}>{`Create ${displayTitle}`}</h1>
