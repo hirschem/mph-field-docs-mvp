@@ -45,6 +45,7 @@ export default function NewInvoice() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
 
   const handleGenerate = () => {
     const hasMaterials = false;
@@ -176,11 +177,13 @@ export default function NewInvoice() {
         {`Create ${displayTitle}`}
       </h1>
 
-      <div className="newdoc-controls" style={{ marginBottom: "24px" }}>
+      <div className="newdoc-controls" style={{ marginBottom: '24px' }}>
         <input
           type="file"
           accept="image/*"
-          style={{ width: "100%" }}
+          multiple
+          onChange={(e) => setFiles(Array.from(e.target.files || []))}
+          style={{ width: '100%' }}
           disabled={loading}
         />
       </div>
@@ -189,7 +192,7 @@ export default function NewInvoice() {
         <button
           className="newdoc-action-btn"
           onClick={handleGenerate}
-          disabled={loading}
+          disabled={loading || files.length === 0}
         >
           Generate
         </button>
