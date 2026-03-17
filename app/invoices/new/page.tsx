@@ -182,7 +182,9 @@ export default function NewInvoice() {
           type="file"
           accept="image/*"
           multiple
-          onChange={(e) => setFiles(Array.from(e.target.files || []))}
+          onChange={(e) =>
+            setFiles((prev) => [...prev, ...Array.from(e.target.files || [])])
+          }
           style={{ width: '100%' }}
           disabled={loading}
         />
