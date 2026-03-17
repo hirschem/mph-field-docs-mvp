@@ -11,7 +11,7 @@ export default function Home() {
         </a>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-        <a href="/invoices" style={{ fontSize: '1rem', color: '#222', textDecoration: 'underline', marginBottom: '4px' }}>View Invoices</a>
+        <a href="/invoices" style={{ fontSize: '1rem', color: '#222', textDecoration: 'underline', marginBottom: '4px' }}>View Field Docs</a>
         <a href="/book-pages" style={{ fontSize: '1rem', color: '#222', textDecoration: 'underline' }}>View Book Pages</a>
       </div>
     </div>
