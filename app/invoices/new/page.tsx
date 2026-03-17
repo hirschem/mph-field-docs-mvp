@@ -74,7 +74,7 @@ export default function NewInvoice() {
 
     setGenerated(html);
     setSaved(false);
-    setEmailSent(false);
+    //setEmailSent(false);
     setError(null);
   };
 
@@ -108,7 +108,6 @@ export default function NewInvoice() {
     setLoading(false);
   };
 
-
   return (
     <div
       style={{
@@ -116,8 +115,50 @@ export default function NewInvoice() {
         flexDirection: "column",
         alignItems: "center",
         marginTop: "48px",
+        width: "100%",
       }}
     >
+      <style>{`
+        .newdoc-action-btn {
+          display: block;
+          width: 100%;
+          padding: 12px 20px;
+          font-size: 1.1rem;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          background: #f9f9f9;
+          color: #222;
+          text-decoration: none;
+          text-align: center;
+          transition: background 0.15s ease;
+          cursor: pointer;
+        }
+        .newdoc-action-btn:hover:not(:disabled) {
+          background: #f0f0f0;
+        }
+        .newdoc-action-btn:disabled {
+          background: #f3f3f3;
+          color: #aaa;
+          cursor: not-allowed;
+        }
+        .newdoc-controls {
+          width: 100%;
+          max-width: 400px;
+        }
+        .newdoc-preview {
+          width: 100%;
+          max-width: 400px;
+          padding: 32px 20px;
+          border: 1px solid #ddd;
+          background: #fff;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+          margin-top: 28px;
+          text-align: left;
+          line-height: 1.7;
+        }
+      `}</style>
+
       <a
         href={backHref}
         style={{
@@ -135,47 +176,36 @@ export default function NewInvoice() {
         {`Create ${displayTitle}`}
       </h1>
 
-      <input
-        type="file"
-        accept="image/*"
-        style={{ marginBottom: "24px", fontSize: "1rem" }}
-        disabled={loading}
-      />
+      <div className="newdoc-controls" style={{ marginBottom: "24px" }}>
+        <input
+          type="file"
+          accept="image/*"
+          style={{ width: "100%" }}
+          disabled={loading}
+        />
+      </div>
 
-      <button
-        style={{ padding: "16px 32px", fontSize: "1.1rem", marginBottom: "16px" }}
-        onClick={handleGenerate}
-        disabled={loading}
-      >
-        Generate
-      </button>
+      <div className="newdoc-controls" style={{ marginBottom: "16px" }}>
+        <button
+          className="newdoc-action-btn"
+          onClick={handleGenerate}
+          disabled={loading}
+        >
+          Generate
+        </button>
+      </div>
 
-      <button
-        style={{ padding: "12px 24px", fontSize: "1rem", marginBottom: "16px" }}
-        onClick={handleSave}
-        disabled={!generated || saved || loading}
-      >
-        Save
-      </button>
+      <div className="newdoc-controls" style={{ marginBottom: "16px" }}>
+        <button
+          className="newdoc-action-btn"
+          onClick={handleSave}
+          disabled={!generated || saved || loading}
+        >
+          Save
+        </button>
+      </div>
 
-
-      <div
-        style={{
-          marginTop: "32px",
-          fontSize: "1rem",
-          color: "#222",
-          border: "1px solid #ddd",
-          background: "#fff",
-          padding: "40px 48px",
-          width: "100%",
-          maxWidth: "700px",
-          minHeight: "48px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-          textAlign: "left",
-          borderRadius: "6px",
-          lineHeight: 1.7,
-        }}
-      >
+      <div className="newdoc-preview">
         {generated ? (
           <span dangerouslySetInnerHTML={{ __html: generated }} />
         ) : (
@@ -190,7 +220,6 @@ export default function NewInvoice() {
       )}
 
       {error && <div style={{ color: "red", marginTop: "8px" }}>{error}</div>}
-
     </div>
   );
 }
