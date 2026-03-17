@@ -4,7 +4,7 @@ export default function Home() {
       <h1 style={{ fontSize: '2rem', marginBottom: '32px' }}>MPH Field Docs</h1>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%', maxWidth: '400px', marginBottom: '32px' }}>
         <a href="/invoices/new" style={{ width: '100%' }}>
-          <button style={{ width: '100%', padding: '24px', fontSize: '1.25rem', marginBottom: '8px' }}>Create New Invoice</button>
+          <button style={{ width: '100%', padding: '24px', fontSize: '1.25rem', marginBottom: '8px' }}>Create New Field Document</button>
         </a>
         <a href="/book-pages/new" style={{ width: '100%' }}>
           <button style={{ width: '100%', padding: '24px', fontSize: '1.25rem' }}>Transcribe Book Page</button>

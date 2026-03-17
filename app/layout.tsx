@@ -41,7 +41,7 @@ export default function RootLayout({
           }}
         >
           <a href="/" style={{ textDecoration: 'none', color: '#222' }}>Home</a>
-          <a href="/invoices" style={{ textDecoration: 'none', color: '#222' }}>Invoices</a>
+          <a href="/invoices" style={{ textDecoration: 'none', color: '#222' }}>Field Docs</a>
           <a href="/book-pages" style={{ textDecoration: 'none', color: '#222' }}>Book Pages</a>
         </nav>
         <style>{`
