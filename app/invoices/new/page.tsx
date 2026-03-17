@@ -179,15 +179,34 @@ export default function NewInvoice() {
 
       <div className="newdoc-controls" style={{ marginBottom: '24px' }}>
         <input
+          id="field-doc-upload"
           type="file"
           accept="image/*"
           multiple
           onChange={(e) =>
             setFiles((prev) => [...prev, ...Array.from(e.target.files || [])])
           }
-          style={{ width: '100%' }}
+          style={{ display: "none" }}
           disabled={loading}
         />
+        <label
+          htmlFor="field-doc-upload"
+          style={{
+            display: "block",
+            width: "100%",
+            padding: "12px 20px",
+            fontSize: "1.1rem",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+            background: "#f9f9f9",
+            color: "#222",
+            textAlign: "center",
+            cursor: "pointer",
+            boxSizing: "border-box",
+          }}
+        >
+          {files.length === 0 ? "Upload Images" : "Add More Images"}
+        </label>
         {files.length > 0 && (
           <div style={{ marginTop: "8px", fontSize: "0.95rem", color: "#555" }}>
             {files.map((file) => (
