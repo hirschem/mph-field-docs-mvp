@@ -186,6 +186,13 @@ export default function NewInvoice() {
           style={{ width: '100%' }}
           disabled={loading}
         />
+        {files.length > 0 && (
+          <div style={{ marginTop: "8px", fontSize: "0.95rem", color: "#555" }}>
+            {files.map((file) => (
+              <div key={file.name}>{file.name}</div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="newdoc-controls" style={{ marginBottom: "16px" }}>
