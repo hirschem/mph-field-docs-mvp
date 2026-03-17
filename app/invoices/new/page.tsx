@@ -13,6 +13,15 @@ const COMPANY_INFO_HTML = `
   </div>
 `;
 
+// Bill To section for invoices
+const BILL_TO_HTML = `
+  <div style="margin-bottom: 16px;">
+    Bill To:<br>
+    Client Name<br>
+    Client Address
+  </div>
+`;
+
 export default function NewInvoice() {
   const [generated, setGenerated] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -21,10 +30,21 @@ export default function NewInvoice() {
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = () => {
-    setGenerated(
-      COMPANY_INFO_HTML +
-        "<b>Sample Invoice Content</b><br>This is a generated invoice."
-    );
+    // Section flags
+    const hasMaterials = false;
+    const materialsNotIncluded = false;
+
+    let html = COMPANY_INFO_HTML;
+    html += BILL_TO_HTML;
+    html += '<div style="margin-bottom: 16px;"><b>Scope of Work</b><br>Paint interior walls and ceilings.</div>';
+    if (hasMaterials) {
+      html += '<div style="margin-bottom: 16px;"><b>Materials</b><br>List of materials goes here.</div>';
+    }
+    if (materialsNotIncluded) {
+      html += '<div style="margin-bottom: 16px; color: #a00;"><b>Materials Not Included</b><br>Client is responsible for providing materials.</div>';
+    }
+    html += '<div style="margin-bottom: 16px;"><b>Total</b><br>$2,500</div>';
+    setGenerated(html);
     setSaved(false);
     setEmailSent(false);
     setError(null);
