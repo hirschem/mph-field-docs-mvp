@@ -4,7 +4,7 @@ import { useState } from "react";
 // Fixed company info block for invoices
 const COMPANY_INFO_HTML = `
   <div style="margin-bottom: 16px;">
-    MPH Construction and Painting<br>
+    <h2 style="margin:0 0 4px 0;font-size:1.35em;font-weight:bold;">MPH Construction and Painting</h2>
     720-883-5097<br>
     303-249-4563<br>
     mhirsch60@hotmail.com<br>
@@ -116,7 +116,23 @@ export default function NewInvoice() {
       >
         Email
       </button>
-      <div style={{ marginTop: '16px', fontSize: '1rem', color: '#555', border: '1px solid #ddd', padding: '24px', width: '100%', maxWidth: '400px', textAlign: 'center', minHeight: '48px' }}>
+      <div
+        style={{
+          marginTop: '32px',
+          fontSize: '1rem',
+          color: '#222',
+          border: '1px solid #ddd',
+          background: '#fff',
+          padding: '40px 48px',
+          width: '100%',
+          maxWidth: '700px',
+          minHeight: '48px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+          textAlign: 'left',
+          borderRadius: '6px',
+          lineHeight: 1.7,
+        }}
+      >
         {generated ? <span dangerouslySetInnerHTML={{ __html: generated }} /> : "Generated invoice will appear here."}
       </div>
       {saved && <div style={{ color: 'green', marginTop: '8px' }}>Invoice saved. You can open saved invoices from the library for viewing later.</div>}
