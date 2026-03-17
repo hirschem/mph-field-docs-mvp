@@ -1,48 +1,6 @@
 "use client";
 import { useState } from "react";
 
-/*
-TEMP IMPLEMENTATION NOTES (REMOVE LATER)
-
-This file is currently being used to test multiple document types
-inside /invoices/new without changing architecture.
-
-These are intentional temporary decisions:
-
-1. documentType is hardcoded
-   - Used for testing: "invoice" | "proposal" | "inspection"
-   - Later: derive from route or separate pages
-
-2. Save payload type is forced to "invoice"
-   - Current:
-     type: "invoice"
-   - Reason: backend + library flow only supports invoices right now
-   - Later: change to:
-     type: documentType
-
-3. Page route is still /invoices/new
-   - But rendering inspection/proposal behavior
-   - Later: split into proper routes or shared generator
-
-4. Back link still points to /invoices
-   - Later: make dynamic per document type
-
-5. Content is hardcoded (Scope, Materials, $2,500)
-   - Used only for structure testing
-   - Later: replace with real generated data
-
-6. Pricing logic is simplified
-   - Controlled via documentType
-   - Later: tie to actual generation results
-
-HIGH RISK ITEM:
-- type: "invoice" in handleSave
-  This MUST be reverted when multi-document support is implemented.
-
-Do not forget to clean this up before expanding features.
-*/
-
-
 // Fixed company info block for documents
 const COMPANY_INFO_HTML = `
   <div style="margin-bottom: 16px;">
@@ -71,21 +29,11 @@ export default function NewInvoice() {
       inspection: { hasPricing: false, pricingLabel: "" },
     };
   const documentType: "invoice" | "proposal" | "inspection" = "inspection";
-  const backHrefMap = {
-    invoice: "/invoices",
-    proposal: "/book-pages",
-    inspection: "/book-pages",
-  };
-  const backTextMap = {
-    invoice: "Back to Invoices",
-    proposal: "Back to Book Pages",
-    inspection: "Back to Book Pages",
-  };
-  const backHref = backHrefMap[documentType];
-  const backText = backTextMap[documentType];
+  const backHref = "/invoices";
+  const backText = "Back to Field Documents";
 
   const titleMap = {
-    invoice: "Invoice",
+    invoice: "Field Document",
     proposal: "Proposal",
     inspection: "Inspection",
   };
@@ -228,7 +176,7 @@ export default function NewInvoice() {
 
       {saved && (
         <div style={{ color: "green", marginTop: "8px" }}>
-          {displayTitle} saved. You can open saved documents from the library for viewing later.
+          Field Document saved. You can open saved documents from the library for viewing later.
         </div>
       )}
 
