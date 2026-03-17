@@ -16,7 +16,7 @@ const COMPANY_INFO_HTML = `
 // Bill To section for invoices
 const BILL_TO_HTML = `
   <div style="margin-bottom: 16px;">
-    Bill To:<br>
+    <strong style="font-size: 16px;">Bill To:</strong><br>
     Client Name<br>
     Client Address
   </div>
@@ -38,12 +38,12 @@ export default function NewInvoice() {
 
     let html = COMPANY_INFO_HTML;
     html += BILL_TO_HTML;
-    html += '<div style="margin-bottom: 16px;"><b>Scope of Work</b><br>Paint interior walls and ceilings.</div>';
+    html += '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Scope of Work</strong><br>Paint interior walls and ceilings.</div>';
     if (hasMaterials) {
-      html += '<div style="margin-bottom: 16px;"><b>Materials</b><br>List of materials goes here.</div>';
+      html += '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Materials</strong><br>List of materials goes here.</div>';
     }
     if (materialsNotIncluded) {
-      html += '<div style="margin-bottom: 16px; color: #a00;"><b>Materials Not Included</b><br>Client is responsible for providing materials.</div>';
+      html += '<div style="margin-bottom: 16px; color: #a00;"><strong style="font-size: 16px;">Materials Not Included</strong><br>Client is responsible for providing materials.</div>';
     }
     // Pricing section only renders here if hasPricing is true
     if (hasPricing) {
