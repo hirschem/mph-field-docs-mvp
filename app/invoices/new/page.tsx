@@ -67,7 +67,21 @@ export default function NewInvoice() {
 
     await worker.terminate();
 
-    setGenerated(`<pre>${extractedText || "No text found"}</pre>`);
+    const res = await fetch("/api/generate-document", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text: extractedText }),
+    });
+
+    if (!res.ok) {
+    throw new Error("AI generation failed");
+    }
+
+    const data = await res.json();
+
+    setGenerated(data.html);
     setSaved(false);
   } catch (err) {
     console.error(err);

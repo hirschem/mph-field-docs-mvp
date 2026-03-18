@@ -1,34 +1,58 @@
-import { NextRequest } from "next/server";
+import OpenAI from "openai";
 
-export async function POST(req: NextRequest) {
-  console.log("OCR ROUTE HIT");
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+});
 
+export async function POST(req: Request) {
   try {
-    const formData = await req.formData();
-    const files = formData.getAll("files") as File[];
+    const { text } = await req.json();
 
-    const { createWorker } = await import("tesseract.js");
-    const worker = await createWorker({ logger: () => {} });
-    await worker.loadLanguage("eng");
-    await worker.initialize("eng");
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:`
+You are an expert construction estimator.
 
-    let extractedText = "";
+You will receive messy OCR text from job site notes.
 
-    for (const file of files) {
-      const buffer = Buffer.from(await file.arrayBuffer());
+Your job:
+- Clean and interpret the text
+- Infer meaning when OCR is unclear
+- Ignore obvious OCR noise
+- Produce a clean, professional Field Document
 
-      const {
-        data: { text },
-      } = await worker.recognize(buffer);
+Format output as clean HTML with these sections ONLY if relevant:
 
-      extractedText += text + "\n\n";
-    }
+1. Scope of Work
+- Clear bullet-style or paragraph description of the job
 
-    await worker.terminate();
+2. Materials (only if mentioned or implied)
 
-    return Response.json({
-      html: `<pre>${extractedText || "No text found"}</pre>`,
+3. Total / Pricing (only if mentioned)
+
+Rules:
+- Do NOT include raw OCR text
+- Do NOT explain anything
+- Do NOT include headings that are empty
+- Make reasonable assumptions if needed (this is critical)
+- Write like a professional contractor document
+
+Return ONLY HTML. No markdown. No explanation.
+`
+        },
+        {
+          role: "user",
+          content: text,
+        },
+      ],
     });
+
+    const html = completion.choices[0].message.content || "<p>No output</p>";
+
+    return Response.json({ html });
   } catch (err) {
     console.error(err);
     return new Response("Error", { status: 500 });
