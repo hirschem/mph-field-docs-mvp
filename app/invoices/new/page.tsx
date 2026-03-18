@@ -177,57 +177,73 @@ export default function NewInvoice() {
         {`Create ${displayTitle}`}
       </h1>
 
-      <div className="newdoc-controls" style={{ marginBottom: '24px' }}>
-        <input
-          id="field-doc-upload"
-          type="file"
-          accept="image/*"
-          multiple
-          capture="environment"
-          onChange={(e) =>
-            setFiles((prev) => [...prev, ...Array.from(e.target.files || [])])
-          }
-          style={{ display: "none" }}
-          disabled={loading}
-        />
-        <label
-          htmlFor="field-doc-upload"
-          style={{
-            display: "block",
-            width: "100%",
-            padding: "12px 20px",
-            fontSize: "1.1rem",
-            border: "1px solid #ccc",
-            borderRadius: "6px",
-            background: "#f9f9f9",
-            color: "#222",
-            textAlign: "center",
-            cursor: "pointer",
-            boxSizing: "border-box",
-          }}
-        >
-          {files.length === 0 ? "Upload Images" : "Add More Images"}
-        </label>
-        {files.length > 0 && (
-          <div style={{ marginTop: "8px", fontSize: "0.95rem", color: "#555" }}>
-            {files.map((file, index) => (
-              <div key={file.name}>
-                Image {index + 1} uploaded
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFiles((prev) => prev.filter((_, i) => i !== index))
-                  }
-                  style={{ marginLeft: "10px", fontSize: "0.9em", padding: "2px 8px", color: "red" }}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+     <div className="newdoc-controls" style={{ marginBottom: "24px" }}>
+  <form style={{ margin: 0 }}>
+    <input
+      id="field-doc-upload"
+      type="file"
+      accept="image/*"
+      multiple
+      onChange={(e) => {
+        const newFiles = Array.from(e.target.files || []);
+        setFiles((prev) => [...prev, ...newFiles]);
+        e.currentTarget.form?.reset();
+      }}
+      style={{ display: "none" }}
+      disabled={loading}
+    />
+    <label
+      htmlFor="field-doc-upload"
+      style={{
+        display: "block",
+        width: "100%",
+        padding: "12px 20px",
+        fontSize: "1.1rem",
+        border: "1px solid #ccc",
+        borderRadius: "6px",
+        background: "#f9f9f9",
+        color: "#222",
+        textAlign: "center",
+        cursor: "pointer",
+        boxSizing: "border-box",
+      }}
+    >
+      {files.length === 0 ? "Upload Images" : "Add More Images"}
+    </label>
+  </form>
 
+  {files.length > 0 && (
+    <div style={{ marginTop: "6px", fontSize: "0.92rem", color: "#555" }}>
+      {files.length === 1
+        ? "1 image selected"
+        : `${files.length} images selected`}
+    </div>
+  )}
+
+  {files.length > 0 && (
+    <div style={{ marginTop: "8px", fontSize: "0.95rem", color: "#555" }}>
+      {files.map((file, index) => (
+        <div key={`${file.name}-${file.size}-${index}`}>
+          Image {index + 1} uploaded
+          <button
+            type="button"
+            onClick={() =>
+              setFiles((prev) => prev.filter((_, i) => i !== index))
+            }
+            style={{
+              marginLeft: "10px",
+              fontSize: "0.9em",
+              padding: "2px 8px",
+              color: "red",
+            }}
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
       <div className="newdoc-controls" style={{ marginBottom: "16px" }}>
         <button
           className="newdoc-action-btn"
