@@ -54,27 +54,24 @@ export default function NewInvoice() {
   setError(null);
 
   try {
-    const formData = new FormData();
+    const { createWorker } = await import("tesseract.js");
 
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
+    const worker = await createWorker("eng");
 
-    const res = await fetch("/api/generate-document", {
-      method: "POST",
-      body: formData,
-    });
+    let extractedText = "";
 
-    if (!res.ok) {
-      throw new Error("Failed to generate");
+    for (const file of files) {
+      const result = await worker.recognize(file);
+      extractedText += result.data.text + "\n\n";
     }
 
-    const data = await res.json();
+    await worker.terminate();
 
-    setGenerated(data.html || "<p>No content returned</p>");
+    setGenerated(`<pre>${extractedText || "No text found"}</pre>`);
     setSaved(false);
-  } catch {
-    setError("Failed to generate document.");
+  } catch (err) {
+    console.error(err);
+    setError("Failed to process images.");
   }
 
   setLoading(false);

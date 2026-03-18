@@ -1,14 +1,36 @@
-export async function POST(req: Request) {
+import { NextRequest } from "next/server";
+
+export async function POST(req: NextRequest) {
+  console.log("OCR ROUTE HIT");
+
   try {
     const formData = await req.formData();
-    const files = formData.getAll("files");
+    const files = formData.getAll("files") as File[];
 
-    console.log("FILES RECEIVED:", files.length);
+    const { createWorker } = await import("tesseract.js");
+    const worker = await createWorker({ logger: () => {} });
+    await worker.loadLanguage("eng");
+    await worker.initialize("eng");
+
+    let extractedText = "";
+
+    for (const file of files) {
+      const buffer = Buffer.from(await file.arrayBuffer());
+
+      const {
+        data: { text },
+      } = await worker.recognize(buffer);
+
+      extractedText += text + "\n\n";
+    }
+
+    await worker.terminate();
 
     return Response.json({
-      html: `<div><strong>Received ${files.length} image(s)</strong></div>`,
+      html: `<pre>${extractedText || "No text found"}</pre>`,
     });
-  } catch {
+  } catch (err) {
+    console.error(err);
     return new Response("Error", { status: 500 });
   }
 }
