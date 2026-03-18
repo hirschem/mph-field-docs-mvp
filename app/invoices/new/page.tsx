@@ -47,37 +47,38 @@ export default function NewInvoice() {
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const handleGenerate = () => {
-    const hasMaterials = false;
-    const materialsNotIncluded = false;
-    const config = documentConfig[documentType];
-    const hasPricing = config.hasPricing;
-    const pricingLabel = config.pricingLabel;
+  const handleGenerate = async () => {
+  if (files.length === 0) return;
 
-    let html = COMPANY_INFO_HTML;
-    html += BILL_TO_HTML;
-    html +=
-      '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Scope of Work</strong><br>Paint interior walls and ceilings.</div>';
+  setLoading(true);
+  setError(null);
 
-    if (hasMaterials) {
-      html +=
-        '<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">Materials</strong><br>List of materials goes here.</div>';
+  try {
+    const formData = new FormData();
+
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    const res = await fetch("/api/generate-document", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to generate");
     }
 
-    if (materialsNotIncluded) {
-      html +=
-        '<div style="margin-bottom: 16px; color: #a00;"><strong style="font-size: 16px;">Materials Not Included</strong><br>Client is responsible for providing materials.</div>';
-    }
+    const data = await res.json();
 
-    if (hasPricing) {
-      html += `<div style="margin-bottom: 16px;"><strong style="font-size: 16px;">${pricingLabel}</strong><br/>$2,500</div>`;
-    }
-
-    setGenerated(html);
+    setGenerated(data.html || "<p>No content returned</p>");
     setSaved(false);
-    //setEmailSent(false);
-    setError(null);
-  };
+  } catch {
+    setError("Failed to generate document.");
+  }
+
+  setLoading(false);
+};
 
   const handleSave = async () => {
     if (!generated) return;
