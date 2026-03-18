@@ -4,6 +4,15 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function POST(req: Request) {
   try {
     const { text } = await req.json();
@@ -13,7 +22,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content:`
+          content: `
 You are an expert construction estimator.
 
 You will receive messy OCR text from job site notes.
@@ -24,24 +33,19 @@ Your job:
 - Ignore obvious OCR noise
 - Produce a clean, professional Field Document
 
-Format output as clean HTML with these sections ONLY if relevant:
-
-1. Scope of Work
-- Clear bullet-style or paragraph description of the job
-
-2. Materials (only if mentioned or implied)
-
-3. Total / Pricing (only if mentioned)
-
-Rules:
-- Do NOT include raw OCR text
-- Do NOT explain anything
-- Do NOT include headings that are empty
-- Make reasonable assumptions if needed (this is critical)
-- Write like a professional contractor document
-
-Return ONLY HTML. No markdown. No explanation.
-`
+Return ONLY valid JSON with these keys:
+- scopeOfWork (string)
+- materials (string)
+- pricing (string)
+If a section is not present, return an empty string for that key.
+Do NOT explain anything. Do NOT return anything except valid JSON.
+Example:
+{
+  "scopeOfWork": "Paint interior walls and ceilings.",
+  "materials": "Sherwin-Williams paint, brushes, tape",
+  "pricing": "$2,500"
+}
+`,
         },
         {
           role: "user",
@@ -50,7 +54,23 @@ Return ONLY HTML. No markdown. No explanation.
       ],
     });
 
-    const html = completion.choices[0].message.content || "<p>No output</p>";
+    let parsed;
+    try {
+      parsed = JSON.parse(completion.choices[0].message.content || '{}');
+    } catch {
+      parsed = { scopeOfWork: '', materials: '', pricing: '' };
+    }
+
+    let html = '<h2 style="margin:0 0 16px 0;font-size:1.35em;font-weight:bold;">Field Document</h2>';
+    if (parsed.scopeOfWork && parsed.scopeOfWork.trim()) {
+      html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Scope of Work</strong><br>${parsed.scopeOfWork}</div>`;
+    }
+    if (parsed.materials && parsed.materials.trim()) {
+      html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Materials</strong><br>${parsed.materials}</div>`;
+    }
+    if (parsed.pricing && parsed.pricing.trim()) {
+      html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Total</strong><br>${parsed.pricing}</div>`;
+    }
 
     return Response.json({ html });
   } catch (err) {
