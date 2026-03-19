@@ -105,7 +105,7 @@ export default function NewInvoice() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: documentType,
-          title: generatedTitle || documentType,
+          title: generatedTitle || displayTitle,
           content_html: generated,
         }),
       });
