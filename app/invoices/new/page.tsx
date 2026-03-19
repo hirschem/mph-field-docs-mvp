@@ -42,6 +42,7 @@ export default function NewInvoice() {
   const displayTitle = titleMap[documentType];
 
   const [generated, setGenerated] = useState<string | null>(null);
+  const [generatedTitle, setGeneratedTitle] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -80,8 +81,8 @@ export default function NewInvoice() {
     }
 
     const data = await res.json();
-
     setGenerated(data.html);
+    setGeneratedTitle(data.title || null);
     setSaved(false);
   } catch (err) {
     console.error(err);
@@ -104,7 +105,7 @@ export default function NewInvoice() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: documentType,
-          title: documentType,
+          title: generatedTitle || documentType,
           content_html: generated,
         }),
       });

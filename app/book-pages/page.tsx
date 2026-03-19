@@ -19,7 +19,14 @@ export default async function BookPages() {
           {bookPages.map((doc) => (
             <div key={doc.id} style={{ border: '1px solid #ddd', padding: '16px', borderRadius: '8px', position: 'relative' }}>
               <div style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px' }}>{doc.title}</div>
-              <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '8px' }}>{doc.created_at}</div>
+              <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '8px' }}>{
+                (() => {
+                  const date = new Date(doc.created_at);
+                  const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                  const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                  return `${dateStr} • ${timeStr}`;
+                })()
+              }</div>
               <a href={`/book-pages/${doc.id}`} style={{ fontSize: '0.95rem', color: '#0070f3', textDecoration: 'underline', marginBottom: '8px', display: 'inline-block' }}>View Book Page</a>
               <DeleteButton id={doc.id} />
             </div>
