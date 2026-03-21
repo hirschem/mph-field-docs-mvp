@@ -69,6 +69,13 @@ Example:
       parsed = { scopeOfWork: '', materials: '', pricing: '' };
     }
 
+    let docType = "Inspection";
+    if (parsed.pricing && parsed.pricing.trim()) {
+      docType = "Invoice";
+    } else if (parsed.materials && parsed.materials.trim()) {
+      docType = "Proposal";
+    }
+
     let html = `
   <div style="margin-bottom: 16px;">
     <h2 style="margin:0 0 4px 0;font-size:1.35em;font-weight:bold;">MPH Construction and Painting</h2>
@@ -85,7 +92,7 @@ Example:
     ${escapeHtml(clientAddress || "Client Address")}
   </div>
 
-  <h2 style="margin:0 0 16px 0;font-size:1.35em;font-weight:bold;">Field Document</h2>
+  <h2 style="margin:0 0 16px 0;font-size:1.35em;font-weight:bold;">${docType}</h2>
 `;
     if (parsed.scopeOfWork && parsed.scopeOfWork.trim()) {
       html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Scope of Work</strong><br>${parsed.scopeOfWork}</div>`;
@@ -97,14 +104,14 @@ Example:
       html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Total</strong><br>${parsed.pricing}</div>`;
     }
 
-    // Derive title from clientAddress
-    let generatedTitle = "Field Document";
+    // Derive title from clientAddress and docType
+    let generatedTitle = docType;
     if (parsed.clientAddress && parsed.clientAddress.trim()) {
-    const words = parsed.clientAddress.trim().split(/\s+/).slice(0, 2);
-    if (words.length >= 2) {
-      generatedTitle = `${words.join(" ")} - Field Document`;
+      const words = parsed.clientAddress.trim().split(/\s+/).slice(0, 2);
+      if (words.length >= 2) {
+        generatedTitle = `${words.join(" ")} - ${docType}`;
+      }
     }
-  }
     return Response.json({ html, title: generatedTitle });
   } catch (err) {
     console.error(err);
