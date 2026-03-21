@@ -67,13 +67,23 @@ export default function NewInvoice() {
     }
 
     await worker.terminate();
+    console.log(extractedText);
 
+    const images = (await Promise.all(
+      files.map(
+        (file) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          })
+      )
+    )) as string[];
     const res = await fetch("/api/generate-document", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text: extractedText }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: extractedText, images }),
     });
 
     if (!res.ok) {
