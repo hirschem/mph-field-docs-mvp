@@ -49,58 +49,44 @@ export default function NewInvoice() {
   const [files, setFiles] = useState<File[]>([]);
 
   const handleGenerate = async () => {
-  if (files.length === 0) return;
+    if (files.length === 0) return;
 
-  setLoading(true);
-  setError(null);
+    setLoading(true);
+    setError(null);
 
-  try {
-    const { createWorker } = await import("tesseract.js");
+    try {
+      const images = (await Promise.all(
+        files.map(
+          (file) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            })
+        )
+      )) as string[];
+      const res = await fetch("/api/generate-document", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: "", images }),
+      });
 
-    const worker = await createWorker("eng");
+      if (!res.ok) {
+        throw new Error("AI generation failed");
+      }
 
-    let extractedText = "";
-
-    for (const file of files) {
-      const result = await worker.recognize(file);
-      extractedText += result.data.text + "\n\n";
+      const data = await res.json();
+      setGenerated(data.html);
+      setGeneratedTitle(data.title || null);
+      setSaved(false);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to process images.");
     }
 
-    await worker.terminate();
-    console.log(extractedText);
-
-    const images = (await Promise.all(
-      files.map(
-        (file) =>
-          new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          })
-      )
-    )) as string[];
-    const res = await fetch("/api/generate-document", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: extractedText, images }),
-    });
-
-    if (!res.ok) {
-    throw new Error("AI generation failed");
-    }
-
-    const data = await res.json();
-    setGenerated(data.html);
-    setGeneratedTitle(data.title || null);
-    setSaved(false);
-  } catch (err) {
-    console.error(err);
-    setError("Failed to process images.");
-  }
-
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   const handleSave = async () => {
     if (!generated) return;
