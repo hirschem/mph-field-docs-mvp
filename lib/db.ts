@@ -27,7 +27,12 @@ export function getDocumentById(id: number): Promise<{
 import sqlite3 from "sqlite3";
 import path from "path";
 
-const dbPath = path.resolve(process.cwd(), "field-docs.db");
+// Only modify how dbPath is defined:
+const dbPath =
+  process.env.NODE_ENV === "production"
+    ? "/data/field-docs.db"
+    : path.resolve(process.cwd(), "field-docs.db");
+
 const db = new sqlite3.Database(dbPath);
 
 export function initDb(): Promise<void> {
