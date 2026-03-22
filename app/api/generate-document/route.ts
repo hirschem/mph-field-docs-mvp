@@ -77,10 +77,14 @@ Rules:
 
 ---
 
+
 PRICING RULES:
 
 - If ANY dollar amount exists, pricing MUST be filled.
-- Use the final handwritten total when available.
+- The pricing value must equal the sum of all amounts in lineItems when lineItems are present.
+- Do not return a pricing total that conflicts with the extracted lineItems.
+- If a final handwritten total is visible and it matches the line items, use it.
+- If a final handwritten total is visible but conflicts with the extracted lineItems, prioritize internal consistency so pricing equals the sum of lineItems.
 - Preserve numeric values even if messy.
 - Only return empty pricing if absolutely no price exists.
 
@@ -140,6 +144,18 @@ EXAMPLE:
       parsed = JSON.parse(completion.choices[0].message.content || '{}');
     } catch {
       parsed = { scopeOfWork: '', materials: '', pricing: '', lineItems: [] };
+    }
+
+    // Calculate pricing from lineItems if present
+    if (Array.isArray(parsed.lineItems) && parsed.lineItems.length > 0) {
+      const sum = parsed.lineItems.reduce((acc: number, item: { amount?: string }) => {
+        if (item && typeof item.amount === 'string') {
+          const num = Number(item.amount.replace(/[^\d.\-]/g, ''));
+          return acc + (isNaN(num) ? 0 : num);
+        }
+        return acc;
+      }, 0);
+      parsed.pricing = sum > 0 ? `$${sum.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}` : '';
     }
 
     let html = `
