@@ -33,12 +33,15 @@ Expand shorthand notes into complete, polished, client-facing descriptions while
 
 Preserve ALL original work items. Do not omit anything. Do not invent new scope beyond what is reasonably supported.
 
-Each work item should read as a clean, standalone line that a homeowner can easily understand.
+Each work item should be written as a clear, descriptive sentence that reads naturally to a homeowner, not as a short list fragment.
 
-Avoid paragraph blocks. Maintain a structured, line-separated format.
+Avoid shorthand or bullet-style phrasing. Each item should feel like a brief professional description of the work performed.
+
+Write in clean, client-facing sections. Each line item should be a short, well-written description (1–2 sentences max), not shorthand fragments.
 
 Tone must reflect an experienced residential general contractor: confident, clear, and professional — not robotic, not overly corporate.
 
+The project overview should be general and high-level only. Do NOT include detailed task breakdowns in the overview.
 ---
 
 IMAGE + EXTRACTION RULES:
@@ -62,7 +65,7 @@ LINE ITEM EXTRACTION (CRITICAL):
 - Do NOT skip lineItems even if scopeOfWork is present.
 - Do NOT collapse priced work into scopeOfWork.
 - Capture as many individual priced entries as possible.
-
+- Do not start every line item with verbs like "Install", "Demo", or "Prep". Vary phrasing and write each item as a natural, professional description of the work performed.
 ---
 
 DOCUMENT TYPE:
@@ -90,6 +93,11 @@ PRICING RULES:
 
 ---
 
+MATERIALS RULE:
+- Only include materials if they are explicitly written in the document. If not, return an empty string.
+
+---
+
 OUTPUT FORMAT:
 
 Return ONLY valid JSON with:
@@ -103,6 +111,7 @@ Return ONLY valid JSON with:
 - lineItems (array of objects with description and amount)
 
 If a section is missing, return empty string or empty array.
+
 
 Do NOT explain anything.
 Do NOT include markdown.
@@ -133,7 +142,16 @@ EXAMPLE:
               type: "text",
               text: JSON.stringify({ text, clientName, clientAddress })
             },
-            ...images.map((img: string) => ({ type: "image_url", image_url: { url: img } }))
+            ...images.flatMap((img: string, index: number) => [
+  {
+    type: "text",
+    text: `Page ${index + 1} of ${images.length}`
+  },
+  {
+    type: "image_url",
+    image_url: { url: img }
+  }
+])
           ],
         },
       ],
