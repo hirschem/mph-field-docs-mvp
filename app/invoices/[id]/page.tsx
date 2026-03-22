@@ -93,7 +93,9 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
           minHeight: '48px'
         }}
       >
-        <span dangerouslySetInnerHTML={{ __html: doc.content_html }} />
+        <div style={{ width: '100%', maxWidth: '800px', margin: '24px auto', padding: '32px 20px' }}>
+          <span dangerouslySetInnerHTML={{ __html: doc.content_html }} />
+        </div>
       </div>
       <script
         dangerouslySetInnerHTML={{

@@ -171,13 +171,13 @@ export default function NewInvoice() {
         }
         .newdoc-preview {
           width: 100%;
-          max-width: 400px;
+          max-width: 800px;
+          margin: 28px auto 0 auto;
           padding: 32px 20px;
           border: 1px solid #ddd;
           background: #fff;
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-          margin-top: 28px;
           text-align: left;
           line-height: 1.7;
         }
