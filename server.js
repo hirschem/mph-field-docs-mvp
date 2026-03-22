@@ -1,59 +1,27 @@
-import { createServer } from 'http';
-import next from 'next';
+import { createServer } from "http";
 
 const port = process.env.PORT || 8080;
-const hostname = '0.0.0.0';
-const dev = false;
-const app = next({ dev, hostname, port });
-const handle = app.getRequestHandler();
+const hostname = "0.0.0.0";
 
-function logRequest(req, res) {
-  const start = Date.now();
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} -> ${res.statusCode} (${duration}ms)`);
-  });
-}
+const server = createServer((req, res) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 
-function logError(err, req, res) {
-  console.error(`[${new Date().toISOString()}] ERROR:`, err);
-  if (res && !res.headersSent) {
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Internal Server Error');
+  if (req.url === "/api/health") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("ok");
+    return;
   }
-}
 
-process.on('uncaughtException', (err) => {
-  console.error(`[${new Date().toISOString()}] uncaughtException:`, err);
-});
-process.on('unhandledRejection', (reason) => {
-  console.error(`[${new Date().toISOString()}] unhandledRejection:`, reason);
-});
-process.on('exit', (code) => {
-  console.log(`[${new Date().toISOString()}] process exit: code ${code}`);
-});
-process.on('SIGTERM', () => {
-  console.log(`[${new Date().toISOString()}] SIGTERM received, shutting down.`);
-  process.exit(0);
-});
-process.on('SIGINT', () => {
-  console.log(`[${new Date().toISOString()}] SIGINT received, shutting down.`);
-  process.exit(0);
+  if (req.url === "/" || req.url?.startsWith("/?")) {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("plain node ok");
+    return;
+  }
+
+  res.writeHead(404, { "Content-Type": "text/plain" });
+  res.end("not found");
 });
 
-app.prepare().then(() => {
-  createServer(async (req, res) => {
-    logRequest(req, res);
-    try {
-      await handle(req, res);
-    } catch (err) {
-      logError(err, req, res);
-    }
-  }).listen(port, hostname, () => {
-    console.log(`[${new Date().toISOString()}] Server started on http://${hostname}:${port}`);
-  });
-}).catch((err) => {
-  console.error(`[${new Date().toISOString()}] Failed to start server:`, err);
-  process.exit(1);
+server.listen(port, hostname, () => {
+  console.log(`[${new Date().toISOString()}] Plain server started on http://${hostname}:${port}`);
 });
