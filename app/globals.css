@@ -1,3 +1,23 @@
+/* Force readable preview for generated docs */
+.newdoc-preview {
+  background: #fff !important;
+  color: #171717 !important;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+  overflow-x: auto;
+}
+.newdoc-preview p,
+.newdoc-preview div,
+.newdoc-preview span,
+.newdoc-preview strong,
+.newdoc-preview li,
+.newdoc-preview h1,
+.newdoc-preview h2,
+.newdoc-preview h3,
+.newdoc-preview h4 {
+  color: #171717 !important;
+}
 @import "tailwindcss";
 
 :root {
