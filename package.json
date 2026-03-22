@@ -2,10 +2,11 @@
   "name": "mph-field-docs-mvp",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node server.js",
+    "start": "next start -p 8080",
     "lint": "eslint"
   },
   "dependencies": {
