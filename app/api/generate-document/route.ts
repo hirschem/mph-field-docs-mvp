@@ -25,6 +25,8 @@ export async function POST(req: Request) {
           role: "system",
           content: `
 
+You will be given multiple images representing one document. Treat them as sequential pages of the same job.
+
 Rewrite each scope item in clear, professional residential construction language suitable for a high-end client.
 
 Expand shorthand notes into complete, polished, client-facing descriptions while preserving the original meaning.
@@ -42,12 +44,10 @@ Tone must reflect an experienced residential general contractor: confident, clea
 IMAGE + EXTRACTION RULES:
 
 - The images are the PRIMARY source of truth.
-- OCR text is unreliable and should only be used as a fallback.
-- If there is any conflict, TRUST THE IMAGE.
 
-- Read the entire document carefully from top to bottom.
-- Extract ALL visible work items.
-- Extract ALL visible dollar amounts.
+- Read ALL provided images as one continuous document.
+- Do not finalize output until every image has been processed.
+- Extract ALL work items and ALL dollar amounts across ALL images.
 
 - DO NOT summarize.
 - DO NOT combine multiple items into one.
@@ -184,7 +184,7 @@ EXAMPLE:
     }
     if (Array.isArray(parsed.lineItems) && parsed.lineItems.length > 0) {
       html += `<div style=\"margin-bottom:16px;\"><strong style=\"font-size:16px;\">Line Items</strong><br>` +
-        parsed.lineItems.map((item: { description: string; amount: string }) => `${escapeHtml(item.description)} ${escapeHtml(item.amount)}`).join('<br>') +
+        parsed.lineItems.map((item: { description: string; amount: string }) => `${escapeHtml(item.description)} — ${escapeHtml(item.amount)}`).join('<br>') +
         `</div>`;
     }
     if (parsed.pricing && parsed.pricing.trim()) {
