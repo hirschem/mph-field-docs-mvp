@@ -1,9 +1,12 @@
 // No changes needed, code already matches requirements.
+
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+function getClient() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY!,
+  });
+}
 
 function escapeHtml(value: string) {
   return value
@@ -18,6 +21,7 @@ export async function POST(req: Request) {
   try {
     const { text = "", clientName = "", clientAddress = "", images = [] } = await req.json();
 
+    const client = getClient();
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
