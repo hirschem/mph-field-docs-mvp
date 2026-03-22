@@ -1,11 +1,26 @@
-
-import sqlite3 from "sqlite3";
+import fs from "fs";
 import path from "path";
+import sqlite3 from "sqlite3";
 
 const dbPath =
   process.env.NODE_ENV === "production"
     ? "/data/field-docs.db"
     : path.resolve(process.cwd(), "field-docs.db");
+
+// 🔴 ADD THIS BLOCK
+if (process.env.NODE_ENV === "production") {
+  try {
+    if (!fs.existsSync("/data")) {
+      fs.mkdirSync("/data", { recursive: true });
+    }
+
+    if (!fs.existsSync(dbPath)) {
+      fs.writeFileSync(dbPath, "");
+    }
+  } catch (err) {
+    console.error("DB FILE SETUP FAILED", err);
+  }
+}
 
 let db: sqlite3.Database | null = null;
 
