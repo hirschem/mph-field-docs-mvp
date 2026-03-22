@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getDocumentById, initDb } from '../../../lib/db';
 
 export default async function InvoiceDetail({ params }: { params: Promise<{ id: string }> }) {

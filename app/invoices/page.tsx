@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 
 import { initDb, getDocuments } from '../../lib/db';
 import DeleteButton from './DeleteButton';
@@ -34,15 +35,15 @@ export default async function Invoices() {
         invoices.map((invoice: any) => (
           <div key={invoice.id} style={{ width: '100%', maxWidth: '400px', marginBottom: '16px', border: '1px solid #ddd', borderRadius: '6px', padding: '16px', background: '#fff' }}>
             <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '8px' }}>{invoice.title}</div>
-            <div style={{ fontSize: '0.95rem', color: '#888', marginBottom: '8px' }}>{
-              (() => {
+            <div style={{ fontSize: '0.95rem', color: '#888', marginBottom: '8px' }}>
+              {(() => {
                 const date = new Date(invoice.created_at);
                 const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
                 return `${dateStr} • ${timeStr}`;
-              })()
-            }</div>
-            <a href={`/invoices/${invoice.id}`} style={{ color: '#0070f3', textDecoration: 'underline', marginRight: '16px' }}>View Invoice</a>
+              })()}
+            </div>
+            <a href={`/invoices/${invoice.id}`} style={{ fontSize: '0.95rem', color: '#0070f3', textDecoration: 'underline', marginBottom: '8px', display: 'inline-block' }}>View Field Document</a>
             <DeleteButton id={invoice.id} />
           </div>
         ))
