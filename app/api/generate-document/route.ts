@@ -24,24 +24,33 @@ export async function POST(req: Request) {
         {
           role: "system",
           content: `
-You are an expert construction estimator.
-Write in polished, professional contractor language.
-Improve clarity, readability, and professionalism.
-Expand rough notes into clean client-facing descriptions when appropriate.
-Keep the writing practical and grounded in the job details.
-Do not sound robotic, overly legal, or overly corporate.
-Do not invent major project details that are not reasonably supported by the notes.
-Only include a Materials value if materials are actually supported by the notes. Otherwise return an empty string.
+
+Rewrite each scope item in clear, professional residential construction language
+Expand shorthand notes into complete, client-facing descriptions where appropriate
+Preserve all original work items, do not omit anything
+Do not invent new scope beyond what is reasonably supported
+Maintain structured line-separated format (one item per line)
+Keep tone consistent with an experienced general contractor
 
 Rules:
-- The uploaded image is the primary source of truth. Use the OCR text only as a helper.
-- This is often a handwritten contractor invoice or estimate photographed from a phone.
-- Read the full document carefully from top to bottom.
-- Extract as many recognizable line items as possible.
-- Do not reduce a multi-line invoice into one short summary if multiple work items are visible.
-- When a final handwritten total is present, use that final total for pricing.
-- Prefer the top handwritten client name and address from the image over OCR text when visible.
-- If the page itself says “Invoice” or “Invoice/Estimate,” strongly prefer documentType: "Invoice" unless the content clearly reads like a forward-looking estimate only.
+
+        Rules:
+        - The images are the PRIMARY source of truth.
+        - The OCR text is UNRELIABLE and should only be used as a fallback.
+        - If there is ANY conflict between OCR text and the images, TRUST THE IMAGES.
+        - Extract ALL visible line items from the images.
+        - DO NOT summarize or combine line items.
+        - Each line item must remain separate.
+        - Capture EVERY visible dollar amount.
+        - Do NOT omit any priced item.
+        - The uploaded image is the primary source of truth. Use the OCR text only as a helper.
+        - This is often a handwritten contractor invoice or estimate photographed from a phone.
+        - Read the full document carefully from top to bottom.
+        - Extract as many recognizable line items as possible.
+        - Do not reduce a multi-line invoice into one short summary if multiple work items are visible.
+        - When a final handwritten total is present, use that final total for pricing.
+        - Prefer the top handwritten client name and address from the image over OCR text when visible.
+        - If the page itself says “Invoice” or “Invoice/Estimate,” strongly prefer documentType: "Invoice" unless the content clearly reads like a forward-looking estimate only.
 
 You must return one additional JSON key: documentType. Allowed values are exactly: "Invoice", "Proposal", or "Inspection".
 
@@ -61,22 +70,31 @@ Your job:
 - Ignore obvious OCR noise
 - Produce a clean, professional Field Document
 Return ONLY valid JSON with these keys:
-- scopeOfWork (string)
-- materials (string)
-- pricing (string)
 - clientName (string)
 - clientAddress (string)
 - documentType (string)
-If a section is not present, return an empty string for that key.
+- scopeOfWork (string)
+- materials (string)
+- pricing (string)
+- lineItems (array of objects with description (string) and amount (string))
+If a section is not present, return an empty string or empty array for that key.
+Extract every recognizable priced line item from the document.
+Preserve as many individual amounts as possible.
+Do not collapse multiple priced items into one total.
+Use the final handwritten total as pricing if present.
 Do NOT explain anything. Do NOT return anything except valid JSON.
 Example:
 {
+  "clientName": "John Doe",
+  "clientAddress": "123 Main St Denver",
+  "documentType": "Invoice",
   "scopeOfWork": "Paint interior walls and ceilings.",
   "materials": "Sherwin-Williams paint, brushes, tape",
   "pricing": "$2,500",
-  "clientName": "John Doe",
-  "clientAddress": "123 Main St Denver",
-  "documentType": "Invoice"
+  "lineItems": [
+    { "description": "Paint living room", "amount": "$1,000" },
+    { "description": "Paint kitchen", "amount": "$1,500" }
+  ]
 }
 `,
         },
@@ -97,7 +115,7 @@ Example:
     try {
       parsed = JSON.parse(completion.choices[0].message.content || '{}');
     } catch {
-      parsed = { scopeOfWork: '', materials: '', pricing: '' };
+      parsed = { scopeOfWork: '', materials: '', pricing: '', lineItems: [] };
     }
 
     let html = `
@@ -123,6 +141,11 @@ Example:
     }
     if (parsed.materials && parsed.materials.trim()) {
       html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Materials</strong><br>${parsed.materials}</div>`;
+    }
+    if (Array.isArray(parsed.lineItems) && parsed.lineItems.length > 0) {
+      html += `<div style=\"margin-bottom:16px;\"><strong style=\"font-size:16px;\">Line Items</strong><br>` +
+        parsed.lineItems.map((item: { description: string; amount: string }) => `${escapeHtml(item.description)} ${escapeHtml(item.amount)}`).join('<br>') +
+        `</div>`;
     }
     if (parsed.pricing && parsed.pricing.trim()) {
       html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Total</strong><br>${parsed.pricing}</div>`;
