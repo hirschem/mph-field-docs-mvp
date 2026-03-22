@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 
-import { initDb, getDocuments } from '../../lib/db';
+import { initDb } from '../../lib/db';
 import DeleteButton from './DeleteButton';
 
 export default async function Invoices() {
   await initDb();
-  const invoices = await getDocuments('invoice');
+  const invoices: any[] = [];
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '48px' }}>
       <h1 style={{ fontSize: '2rem', marginBottom: '32px' }}>Field Documents</h1>
