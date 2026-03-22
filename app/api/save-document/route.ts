@@ -1,6 +1,7 @@
 import { initDb, saveDocument } from "../../../lib/db";
 
 export async function POST(request: Request) {
+  console.log("POST /api/save-document hit");
   try {
     await initDb();
 
@@ -34,7 +35,8 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
     });
-  } catch {
+  } catch (err) {
+    console.error("save-document error:", err);
     return new Response(JSON.stringify({ error: "Server error" }), {
       status: 500,
     });

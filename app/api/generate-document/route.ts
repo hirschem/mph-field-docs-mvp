@@ -18,6 +18,7 @@ function escapeHtml(value: string) {
 }
 
 export async function POST(req: Request) {
+  console.log("POST /api/generate-document hit");
   try {
     const { text = "", clientName = "", clientAddress = "", images = [] } = await req.json();
 
@@ -205,7 +206,7 @@ EXAMPLE:
       html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Materials</strong><br>${parsed.materials}</div>`;
     }
     if (Array.isArray(parsed.lineItems) && parsed.lineItems.length > 0) {
-      html += `<div style=\"margin-bottom:16px;\"><strong style=\"font-size:16px;\">Line Items</strong><br>` +
+      html += `<div style="margin-bottom:16px;"><strong style="font-size:16px;">Line Items</strong><br>` +
         parsed.lineItems.map((item: { description: string; amount: string }) => `${escapeHtml(item.description)} — ${escapeHtml(item.amount)}`).join('<br>') +
         `</div>`;
     }
@@ -223,7 +224,7 @@ EXAMPLE:
     }
     return Response.json({ html, title: generatedTitle });
   } catch (err) {
-    console.error(err);
+    console.error("generate-document error:", err);
     return new Response("Error", { status: 500 });
   }
 }
