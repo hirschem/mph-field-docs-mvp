@@ -79,9 +79,12 @@ export function saveDocument(
       [type, title, content_html, created_at],
       function (err) {
         if (err) {
-          console.error("SAVE ERROR", err);
+          console.error("SAVE ERROR", err, "DB PATH:", dbPath);
           return reject(err);
-        } else resolve(this.lastID);
+        } else {
+          console.log("SAVED DOCUMENT ID:", this.lastID, "DB PATH:", dbPath);
+          resolve(this.lastID);
+        }
       }
     );
   });
