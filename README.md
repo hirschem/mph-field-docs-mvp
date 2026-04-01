@@ -4,6 +4,12 @@ AI-powered field document generator — turns job site photos into clean, client
 
 Built for real-world use by a contractor transitioning into inspection work.
 
+## Live Demo
+
+https://mph-field-docs-mvp-production.up.railway.app/
+
+
+
 <img width="605" height="467" alt="image" src="https://github.com/user-attachments/assets/89e0fd84-ce4b-4533-b696-0136b4c4b21c" />
 
 
