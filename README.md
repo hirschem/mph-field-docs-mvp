@@ -1,12 +1,14 @@
-# MPH Field Docs MVP
+# MPH Field Docs
 
-AI-powered document generation tool for real-world field use.
+AI-powered field document generator — turns job site photos into clean, client-ready invoices and reports.
+
+Built for real-world use by a contractor transitioning into inspection work.
 
 ## Overview
 
-MPH Field Docs MVP is an in-progress web application designed to help contractors generate clean, client-ready documents from photos of handwritten notes or job site details.
+MPH Field Docs is an in-progress web application designed to help contractors generate professional documents from photos of handwritten notes or job site details.
 
-The project is being built around a simple workflow for non-technical users: upload images, generate a document, review it, save it, and print or email it without dealing with complicated file management.
+The workflow is intentionally simple for non-technical users: upload images → generate → review → save → print or email — no file management required.
 
 ## Current Capabilities
 
