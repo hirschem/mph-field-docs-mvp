@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Fixed company info block for documents
 const COMPANY_INFO_HTML = `
@@ -23,6 +24,7 @@ const BILL_TO_HTML = `
 `;
 
 export default function NewInvoice() {
+  const router = useRouter();
   const documentConfig = {
     invoice: { hasPricing: true, pricingLabel: "Total Due" },
     proposal: { hasPricing: true, pricingLabel: "Estimated Total" },
@@ -108,6 +110,8 @@ export default function NewInvoice() {
 
       if (res.ok) {
         setSaved(true);
+        router.push("/invoices");
+        router.refresh();
       } else {
         setError("Failed to save document.");
       }

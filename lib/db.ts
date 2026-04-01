@@ -72,7 +72,7 @@ export function saveDocument(
     const dbInstance = getDb();
     if (!dbInstance) {
       console.error("DB is null");
-      return resolve(0);
+      return reject(new Error("Database instance is null"));
     }
     dbInstance.run(
       `INSERT INTO documents (type, title, content_html, created_at) VALUES (?, ?, ?, ?)`,
@@ -80,7 +80,7 @@ export function saveDocument(
       function (err) {
         if (err) {
           console.error("SAVE ERROR", err);
-          resolve(0);
+          return reject(err);
         } else resolve(this.lastID);
       }
     );

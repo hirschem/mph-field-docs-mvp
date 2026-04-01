@@ -30,8 +30,12 @@ export async function POST(request: Request) {
       });
     }
 
-    await saveDocument(type, title, content_html, new Date().toISOString());
-
+    const id = await saveDocument(type, title, content_html, new Date().toISOString());
+    if (!id) {
+      return new Response(JSON.stringify({ error: "Failed to save document" }), {
+        status: 500,
+      });
+    }
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
     });
