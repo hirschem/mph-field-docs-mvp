@@ -60,5 +60,16 @@ The system already supports the core document-generation flow, but it is still b
 
 Install dependencies:
 
-```bash
-npm install
+    npm install
+
+Run the development server:
+
+    npm run dev
+
+Then open:
+
+    http://localhost:3000
+
+## Notes
+
+This project is being developed with a practical, iterative mindset: get the core workflow working, identify weak points in real use, and improve reliability step by step.
