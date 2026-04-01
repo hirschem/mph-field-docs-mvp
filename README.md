@@ -4,6 +4,8 @@ AI-powered field document generator — turns job site photos into clean, client
 
 Built for real-world use by a contractor transitioning into inspection work.
 
+<img width="605" height="467" alt="image" src="https://github.com/user-attachments/assets/89e0fd84-ce4b-4533-b696-0136b4c4b21c" />
+
 ## Overview
 
 MPH Field Docs is an in-progress web application designed to help contractors generate professional documents from photos of handwritten notes or job site details.
